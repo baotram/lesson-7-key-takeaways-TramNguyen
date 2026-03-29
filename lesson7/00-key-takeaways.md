@@ -69,14 +69,70 @@ normalize-space(string)
 - //element[contains(@attribute, 'substring')]
 - //element[contains(text(), 'substring')]
 
+3. Assertion (khẳng định, xác nhận)
+- câu lệnh để kiểm tra điều gì đó có đúng với mong đợi hay không (không có assertion = không biết test có thành công hay thất bại hay không)
+- Playwright assert thông qua hàm expect
+VD:
+    import {test, expect} from 'playwright/test';
+    test("Test 01", async({page})) => {
+        <!-- Khẳng định rằng title trang phải là "Homepage" -->
+        await expect(page).toHaveTitle("Homepage");
+    }
+- Các loại assertion: 
+● Generic Assertions (từ thư viện expect): expect(giá trị) = (giá trị)
+VD:
+ expect(value).toBe(expected);
+ expect(array).toHaveLength(3);
+ expect(string).toContain('text');
+
+● Web-first Assertions (auto-waiting): expect(phần tử) có giá trị
+VD:
+ await expect(page.locator('button')).toBeVisible();
+ await expect(page).toHaveTitle(/Homepage/);
+ 
++ Element State
+// Kiểm tra visibility
+await expect(locator).toBeVisible();
+await expect(locator).toBeHidden();
+// Kiểm tra enabled/disabled
+await expect(locator).toBeEnabled();
+await expect(locator).toBeDisabled();
+// Kiểm tra checked (checkbox/radio)
+await expect(locator).toBeChecked();
+// Kiểm tra focus
+await expect(locator).toBeFocused();
 
 
++ Text & Content
+// Có chứa text
+await expect(locator).toContainText('Hello');
+// Text chính xác
+await expect(locator).toHaveText('Welcome');
+// Text khớp regex
+await expect(locator).toHaveText(/welcome/i);
+// Kiểm tra nhiều elements
+await expect(locator).toHaveText(['Item 1', 'Item 2']);
+
++ Attributes & Properties
+// Kiểm tra attribute
+await expect(locator).toHaveAttribute('href', '/about');
+// Kiểm tra class
+await expect(locator).toHaveClass('active');
+await expect(locator).toHaveClass(/btn-primary/);
+// Kiểm tra value (input fields)
+await expect(locator).toHaveValue('john@example.com');
+// Kiểm tra count
+await expect(locator).toHaveCount(5);
+
++ Page Assertions
+// URL
+await expect(page).toHaveURL('https://example.com/');
+await expect(page).toHaveURL(/.*checkout/);
+// Title
+await expect(page).toHaveTitle(/Playwright/);
 
 
-
-
-
-
-
+*** Benefit of web-first assertion
+- dùng web-first assertion: chờ flexible (trong tối đa 5s, nếu 1s đã xuất hiện thì thoát luôn)
 
 
